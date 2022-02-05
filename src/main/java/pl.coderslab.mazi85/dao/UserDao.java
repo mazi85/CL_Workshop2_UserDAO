@@ -24,6 +24,9 @@ public class UserDao {
     private static final String FIND_ALL_USER_QUERY =
             "SELECT * FROM users";
 
+    private static final String UPDATE_USER_PASSWORD_QUERY =
+            "UPDATE users SET password=? WHERE id=?";
+
 
     public User create(User user) throws SQLException {
         try (Connection connect = DbUtil.connect("workshop2")) {
@@ -107,9 +110,20 @@ public class UserDao {
         }
     }
 
+    public void updatePassword(User user, String password) throws SQLException {
+        try (Connection conn = DbUtil.connect("workshop2")) {
+            PreparedStatement statement = conn.prepareStatement(UPDATE_USER_PASSWORD_QUERY);
+            statement.setString(1, hashPassword(password));
+            statement.setInt(2, user.getId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+    }
 
 
-        private String hashPassword(String password) {
+
+    private String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
 
     }

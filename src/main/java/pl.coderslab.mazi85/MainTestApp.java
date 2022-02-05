@@ -27,9 +27,14 @@ public class MainTestApp {
         System.out.println(user);
         userDao.delete(user.getId());
 
+
         for (User u : userDao.findAll()) {
             System.out.println(u);
         }
+        userDao.updatePassword(user3,"Abrakadabra");
 
+        for (User u : userDao.findAll()) {
+            System.out.println(u);
+        }
     }
 }

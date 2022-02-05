@@ -19,6 +19,7 @@ public class MainTestApp {
         userDao.update(user);
         user=userDao.read(user.getId());
         System.out.println(user);
+        userDao.delete(user.getId());
 
     }
 }

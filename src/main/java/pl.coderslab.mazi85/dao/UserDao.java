@@ -14,7 +14,10 @@ public class UserDao {
             "SELECT * FROM users WHERE id=?";
 
     private static final String UPDATE_USER_QUERY =
-            "UPDATE users SET email=?, username=? WHERE id=?;";
+            "UPDATE users SET email=?, username=? WHERE id=?";
+
+    private static final String DELETE_USER_QUERY =
+            "DELETE FROM users WHERE id=?";
 
 
     public User create(User user) throws SQLException {
@@ -68,9 +71,16 @@ public class UserDao {
         } catch (SQLException e) {
             throw new SQLException();
         }
+    }
 
-
-
+    public void delete(int userId) throws SQLException {
+        try (Connection connect = DbUtil.connect("workshop2")) {
+            PreparedStatement ps = connect.prepareStatement(DELETE_USER_QUERY);
+            ps.setInt(1,userId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
     }
 
 

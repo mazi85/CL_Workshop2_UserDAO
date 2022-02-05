@@ -4,6 +4,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import pl.coderslab.mazi85.entity.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
 
@@ -18,6 +20,9 @@ public class UserDao {
 
     private static final String DELETE_USER_QUERY =
             "DELETE FROM users WHERE id=?";
+
+    private static final String FIND_ALL_USER_QUERY =
+            "SELECT * FROM users";
 
 
     public User create(User user) throws SQLException {
@@ -78,6 +83,25 @@ public class UserDao {
             PreparedStatement ps = connect.prepareStatement(DELETE_USER_QUERY);
             ps.setInt(1,userId);
             ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
+    }
+
+    public List<User> findAll() throws SQLException {
+        List<User> users= new ArrayList<>();
+        try (Connection connect = DbUtil.connect("workshop2")) {
+            ResultSet rs = connect.createStatement().executeQuery(FIND_ALL_USER_QUERY);
+            while (rs.next()){
+                User user = new User();
+                user.setId(rs.getInt(1));
+                user.setEmail(rs.getString(2));
+                user.setUserName(rs.getString(3));
+                user.setPassword(rs.getString(4));
+                users.add(user);
+            }
+            return users;
+
         } catch (SQLException e) {
             throw new SQLException();
         }

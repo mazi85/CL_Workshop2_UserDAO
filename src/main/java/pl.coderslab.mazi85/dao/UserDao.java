@@ -15,22 +15,44 @@ public class UserDao {
 
 
     public User create(User user) throws SQLException {
-        try(Connection connect = DbUtil.connect("workshop2"))
-        {
-            PreparedStatement psCreate = connect.prepareStatement(CREATE_USER_QUERY,PreparedStatement.RETURN_GENERATED_KEYS);
+        try (Connection connect = DbUtil.connect("workshop2")) {
+            PreparedStatement psCreate = connect.prepareStatement(CREATE_USER_QUERY, PreparedStatement.RETURN_GENERATED_KEYS);
             psCreate.setString(1, user.getEmail());
             psCreate.setString(2, user.getUserName());
             psCreate.setString(3, hashPassword(user.getPassword()));
             psCreate.executeUpdate();
             ResultSet rsKeys = psCreate.getGeneratedKeys();
-            if (rsKeys.next()){
+            if (rsKeys.next()) {
                 user.setId(rsKeys.getInt(1));
             }
             return user;
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new SQLException();
         }
 
+    }
+
+    public User read(int userId) throws SQLException {
+
+
+        try (Connection connect = DbUtil.connect("workshop2")) {
+            PreparedStatement ps = connect.prepareStatement(READ_USER_QUERY);
+            ps.setInt(1, userId);
+            ps.executeQuery();
+            ResultSet rs = ps.getResultSet();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setId(rs.getInt(1));
+                user.setEmail(rs.getString(2));
+                user.setUserName(rs.getString(3));
+                user.setPassword(rs.getString(4));
+                return user;
+            }
+            return null;
+        } catch (SQLException e) {
+            throw new SQLException();
+        }
     }
 
 

@@ -15,4 +15,4 @@ SELECT * FROM users;
 SELECT * FROM users WHERE id=?;
 
 UPDATE users SET password=? WHERE id=?;
-UPDATE users SET email=?, username=? WHERE id=?;
+UPDATE users SET email=?, username=?, password=? WHERE id=?;

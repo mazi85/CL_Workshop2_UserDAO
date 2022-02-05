@@ -10,18 +10,15 @@ public class MainTestApp {
     public static void main(String[] args) throws SQLException {
 
         UserDao userDao = new UserDao();
-//        User marcin80 = new User("psiarz@alibaba.pl", "marcin80", "54321");
-//
-//        try {
-//            marcin80 = userDao.create(marcin80);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        System.out.println(marcin80.getId());
+        User user = new User("oksy@oksy.pl", "paciulok85", "qwerty");
 
-        System.out.println(userDao.read(7));
-
+        userDao.create(user);
+        user = userDao.read(user.getId());
+        System.out.println(user);
+        user.setUserName("paciulok90");
+        userDao.update(user);
+        user=userDao.read(user.getId());
+        System.out.println(user);
 
     }
 }
